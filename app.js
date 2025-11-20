@@ -141,7 +141,7 @@ const CARD_TYPES = {
     pastel: "#c5e590", // tint-lime-5
     accent: "#384e00", // tint-lime-1
     iconColor: "#384e00",
-    icon: "ti-route",
+    icon: "ti-arrow-autofit-right",
   },
   randomizer: {
     label: "Randomizer",

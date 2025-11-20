@@ -202,6 +202,30 @@ body {
   line-height: 1;
 }
 
+.flow-save-status {
+  height: var(--button-size);
+  width: var(--button-size);
+  background: #eee;
+  border-radius: var(--radius-item);
+  border: none;
+  cursor: default;
+}
+
+.flow-save-status .ti {
+  font-size: 1.2rem;
+}
+
+.flow-save-status:hover {
+  background: #eef7ed;
+  transform: none;
+}
+
+.flow-save-status:focus-visible {
+  outline: none;
+  border-color: #dfe7dc;
+  box-shadow: none;
+}
+
 .flow-back-button:hover,
 .flow-history-button:hover {
   background: #eee;
@@ -571,10 +595,11 @@ body {
 #trash-zone {
   position: fixed;
   bottom: 0;
-  left: 0;
+  right: 0;
+  left: auto;
   width: 240px;
   height: 240px;
-  border-radius: 0 100% 0 0;
+  border-radius: 100% 0 0 0;
   background: #ff3a302a;
   color: #b21616;
   display: flex;
