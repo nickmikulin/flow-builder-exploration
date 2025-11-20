@@ -116,6 +116,14 @@ body {
   flex-direction: row;
   background: #f4f4f5;
   color: #222;
+  font-family: inherit;
+}
+
+button,
+input,
+textarea,
+select {
+  font-family: inherit;
 }
 
 #app-shell {
@@ -131,7 +139,7 @@ body {
 
 #flow-header {
   position: absolute;
-  top: 0;
+  top: 0.25rem;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -141,10 +149,10 @@ body {
   z-index: 25;
   background: #ffffff;
   border: 1px solid #eee;
-  border-radius: 0 0 var(--radius-item-container) var(--radius-item-container);
-  box-shadow: 0 0px 22px rgba(0, 0, 0, 0.1);
+  border-radius: var(--radius-item-container);
+  box-shadow: 0 0px 20px #0000001a;
   width: calc(100% - 2rem);
-  max-width: 48rem;
+  max-width: 45rem;
 }
 
 #flow-back {
@@ -161,13 +169,13 @@ body {
   height: var(--button-size);
   flex: 1;
   width: 100%;
-  padding: 0 0.5rem;
+  padding: 0 0.33rem 0.5px 0.33rem;
   border-radius: var(--radius-item);
   border: 1px solid transparent;
   color: #222;
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   font-weight: 600;
-  letter-spacing: -0.025em;
+  letter-spacing: -0.03em;
   outline: none;
   transition: border-color 0.12s ease, box-shadow 0.12s ease,
     background-color 0.12s ease;
@@ -197,6 +205,7 @@ body {
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  font-weight: 500;
   transition: transform 0.12s ease, box-shadow 0.12s ease,
     border-color 0.12s ease, background-color 0.12s ease;
   text-wrap: nowrap;
@@ -328,7 +337,7 @@ body {
 #zoom-display {
   text-align: center;
   font-weight: 600;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   color: #222;
   letter-spacing: -0.02em;
   display: inline-flex;
@@ -338,6 +347,7 @@ body {
   width: var(--button-size);
   background: #eee;
   border-radius: var(--radius-item);
+  font-variant-numeric: tabular-nums;
 }
 
 .flow-history-button,
@@ -348,7 +358,7 @@ body {
 #type-toolbar {
   position: absolute;
   left: 50%;
-  bottom: 0rem;
+  bottom: 0.25rem;
   transform: translateX(-50%);
   outline: 1px solid #eee;
   background: #ffffff;
@@ -358,8 +368,8 @@ body {
   gap: 0.375rem;
   padding: 0.6rem;
   z-index: 20;
-  border-radius: var(--radius-item-container) var(--radius-item-container) 0 0;
-  box-shadow: 0 0px 22px rgba(0, 0, 0, 0.1);
+  border-radius: var(--radius-item-container);
+  box-shadow: 0 0px 20px #0000001a;
 }
 
 .toolbar-button {
@@ -446,44 +456,79 @@ body {
 
 #card-sidebar {
   position: absolute;
-  bottom: 0rem;
+  bottom: 5rem;
   right: -320px;
   width: 320px;
-  height: calc(100vh - 8rem);
+  height: calc(100vh - 10rem);
   z-index: 10;
   background-color: #fff;
   transition: right 0.4s ease;
-  border-radius: var(--radius-item-container) 0 0 0;
+  border-radius: var(--radius-item-container);
   outline: 1px solid #eee;
   background: #ffffff;
-  box-shadow: 0 0px 22px rgba(0, 0, 0, 0.1);
-  padding: 1rem;
+  box-shadow: 0 0px 20px #0000001a;
+  padding: 0.5rem;
 }
 
 #card-sidebar.visible {
-  right: 0rem;
+  right: 0.25rem;
   transition: right 0.4s ease;
 }
 
-#sidebar-close {
-  position: absolute;
+.sidebar-header {
   display: flex;
   align-items: center;
-  justify-content: center;
-  top: 4px;
-  right: 4px;
-  width: var(--button-size);
-  height: var(--button-size);
-  background-color: #fff;
-  border-radius: var(--radius-button);
-  border: none;
-  cursor: pointer;
-  line-height: 1;
-  font-size: 1rem;
+  gap: 0.25rem;
+  padding-bottom: 0.25rem;
 }
 
-#sidebar-close:hover {
-  background-color: #ddd;
+.sidebar-type-icon {
+  position: relative;
+  width: var(--button-size);
+  height: var(--button-size);
+  border-radius: var(--radius-item);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #f4f4f5;
+  color: #222;
+  flex-shrink: 0;
+}
+
+.sidebar-type-icon .ti {
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+#sidebar-title-input {
+  height: var(--button-size);
+  flex: 1;
+  width: 100%;
+  padding: 0 0.33rem;
+  border-radius: var(--radius-item);
+  border: 1px solid transparent;
+  color: #222;
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  outline: none;
+  transition: border-color 0.12s ease, box-shadow 0.12s ease,
+    background-color 0.12s ease;
+}
+
+#sidebar-title-input:focus {
+  background: #fff;
+  border-color: #bbb;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.12);
+}
+
+#sidebar-title-input::placeholder {
+  color: #999;
+}
+
+#sidebar-close {
+  flex-shrink: 0;
+  padding: 0;
 }
 
 .sidebar-body {
@@ -544,8 +589,8 @@ body {
 }
 
 .card.selected {
-  outline-color: var(--card-pastel);
-  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.1);
+  outline: 2px var(--card-pastel) solid;
+  box-shadow: 0 14px 32px #00000030;
 }
 
 #canvas-content {
@@ -728,10 +773,9 @@ body {
 
 .card-title-text {
   margin: 0;
-  font-size: 1rem;
-  font-weight: 500;
-  letter-spacing: 0.075em;
-  text-transform: uppercase;
+  font-size: 1.2rem;
+  font-weight: 600;
+  letter-spacing: -0.05em;
   color: #222;
 }
 

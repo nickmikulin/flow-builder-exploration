@@ -5,7 +5,8 @@ const linesLayer = document.getElementById("connection-lines");
 const trashZone = document.getElementById("trash-zone");
 const toolbar = document.getElementById("type-toolbar");
 const cardSidebar = document.getElementById("card-sidebar");
-const sidebarTitle = document.getElementById("sidebar-title");
+const sidebarTypeIcon = document.getElementById("sidebar-type-icon");
+const sidebarTitleInput = document.getElementById("sidebar-title-input");
 const sidebarBody = document.getElementById("sidebar-body");
 const sidebarClose = document.getElementById("sidebar-close");
 const flowTitleInput = document.getElementById("flow-title-input");
@@ -579,8 +580,8 @@ function updateCardTitleText(cardId, title) {
   if (textEl) {
     textEl.textContent = title;
   }
-  if (activeCardId === cardId && sidebarTitle) {
-    sidebarTitle.textContent = title;
+  if (activeCardId === cardId && sidebarTitleInput) {
+    sidebarTitleInput.value = title;
   }
 }
 
@@ -698,7 +699,16 @@ function hideSidebar() {
   highlightSelectedCard();
   if (!cardSidebar) return;
   cardSidebar.classList.remove("visible");
-  if (sidebarTitle) sidebarTitle.textContent = "";
+  if (sidebarTypeIcon) {
+    const icon = sidebarTypeIcon.querySelector(".ti");
+    if (icon) icon.className = "ti";
+    sidebarTypeIcon.style.setProperty("background", "#f4f4f5");
+    sidebarTypeIcon.style.setProperty("color", "#222");
+  }
+  if (sidebarTitleInput) {
+    sidebarTitleInput.value = "";
+    sidebarTitleInput.blur();
+  }
   if (sidebarBody) sidebarBody.textContent = "";
 }
 
@@ -706,16 +716,40 @@ function updateSidebarContent(card) {
   if (!cardSidebar) return;
   cardSidebar.classList.add("visible");
   const meta = getTypeMeta(card.type);
-  if (sidebarTitle) sidebarTitle.textContent = card.title || meta.label;
+  if (sidebarTypeIcon) {
+    const icon = sidebarTypeIcon.querySelector(".ti");
+    if (icon) {
+      icon.className = `ti ${meta.icon}`;
+    }
+    const pastelBg = meta.pastel || meta.border || "#f4f4f5";
+    sidebarTypeIcon.style.setProperty("background", pastelBg);
+    sidebarTypeIcon.style.setProperty("color", meta.iconColor || meta.accent);
+  }
+  if (sidebarTitleInput) {
+    sidebarTitleInput.value = card.title || meta.label;
+    sidebarTitleInput.placeholder = meta.label;
+    const commitTitle = () => {
+      const trimmed = (sidebarTitleInput.value || "").trim();
+      card.title = trimmed || meta.label;
+      sidebarTitleInput.value = card.title;
+      updateCardTitleText(card.id, card.title);
+      persist(storage.saveCard(card));
+    };
+    sidebarTitleInput.oninput = () => {
+      card.title = sidebarTitleInput.value;
+      updateCardTitleText(card.id, card.title);
+    };
+    sidebarTitleInput.onblur = commitTitle;
+    sidebarTitleInput.onkeydown = (event) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        commitTitle();
+        sidebarTitleInput.blur();
+      }
+    };
+  }
   if (sidebarBody) {
     sidebarBody.innerHTML = "";
-
-    const typeInfo = document.createElement("p");
-    typeInfo.textContent = `Type: ${meta.label}`;
-    typeInfo.style.marginTop = "0";
-
-    sidebarBody.appendChild(typeInfo);
-
     if (card.type === "start") {
       const list = document.createElement("div");
       list.className = "trigger-list";
@@ -755,39 +789,6 @@ function updateSidebarContent(card) {
         list.appendChild(item);
       });
       sidebarBody.appendChild(list);
-    } else {
-      const inputLabel = document.createElement("label");
-      inputLabel.textContent = "Name";
-      inputLabel.style.display = "block";
-      inputLabel.style.fontSize = "0.75rem";
-      inputLabel.style.textTransform = "uppercase";
-      inputLabel.style.color = "#777";
-      inputLabel.style.margin = "1rem 0 0.3rem";
-
-      const input = document.createElement("input");
-      input.type = "text";
-      input.value = card.title;
-      input.maxLength = 80;
-      input.style.width = "100%";
-      input.style.fontSize = "1rem";
-      input.style.padding = "0.4rem 0.6rem";
-      input.style.borderRadius = "10px";
-      input.style.border = "1px solid #d4d4d8";
-      input.addEventListener("input", () => {
-        card.title = input.value;
-        updateCardTitleText(card.id, card.title);
-      });
-      input.addEventListener("blur", () => {
-        const trimmed = input.value.trim();
-        card.title = trimmed || meta.label;
-        input.value = card.title;
-        updateCardTitleText(card.id, card.title);
-        persist(storage.saveCard(card));
-      });
-
-      sidebarBody.appendChild(inputLabel);
-      sidebarBody.appendChild(input);
-      requestAnimationFrame(() => input.focus({ preventScroll: true }));
     }
   }
 }
@@ -799,13 +800,18 @@ function highlightSelectedCard() {
 }
 
 function focusCard(card) {
-  const bounds = getVisibleWorldBounds();
-  const centerX = bounds.left + bounds.width / 2;
-  const centerY = bounds.top + bounds.height / 2;
+  const rect = canvas.getBoundingClientRect();
+  const sidebarWidth =
+    cardSidebar && cardSidebar.classList.contains("visible")
+      ? cardSidebar.getBoundingClientRect().width
+      : 0;
+  const availableWidth = Math.max(rect.width - sidebarWidth, 0);
+  const centerX = availableWidth / 2;
+  const centerY = rect.height / 2;
   const targetX = card.x + 110;
   const targetY = card.y + 70;
-  const nextViewportX = viewport.x + (centerX - targetX) * viewport.scale;
-  const nextViewportY = viewport.y + (centerY - targetY) * viewport.scale;
+  const nextViewportX = centerX - targetX * viewport.scale;
+  const nextViewportY = centerY - targetY * viewport.scale;
   animateViewportTo(nextViewportX, nextViewportY);
 }
 

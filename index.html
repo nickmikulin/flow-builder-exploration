@@ -124,11 +124,29 @@
     </div>
     <div id="card-sidebar" aria-live="polite">
       <div class="sidebar-header">
-        <div>
-          <p class="sidebar-label">Card</p>
-          <h2 id="sidebar-title"></h2>
+        <div
+          id="sidebar-type-icon"
+          class="sidebar-type-icon"
+          aria-hidden="true"
+        >
+          <i class="ti"></i>
         </div>
-        <button id="sidebar-close" type="button" aria-label="Close sidebar">
+        <input
+          id="sidebar-title-input"
+          type="text"
+          inputmode="text"
+          maxlength="80"
+          spellcheck="false"
+          aria-label="Card title"
+          placeholder="Card title"
+        />
+        <button
+          id="sidebar-close"
+          class="flow-history-button"
+          type="button"
+          aria-label="Close sidebar"
+          data-tooltip="Close"
+        >
           <i class="ti ti-x"></i>
         </button>
       </div>
