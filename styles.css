@@ -139,7 +139,7 @@ body {
   border-radius: 0 0 var(--radius-item-container) var(--radius-item-container);
   box-shadow: 0 0px 22px rgba(0, 0, 0, 0.1);
   width: calc(100% - 1rem);
-  max-width: 44rem;
+  max-width: 48rem;
 }
 
 #flow-back {
