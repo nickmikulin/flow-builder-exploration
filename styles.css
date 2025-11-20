@@ -122,6 +122,9 @@ body {
   display: flex;
   min-height: 100vh;
   width: 100%;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1rem;
 }
 
 #flow-header {
@@ -160,8 +163,9 @@ body {
   border-radius: var(--radius-item);
   border: 1px solid transparent;
   color: #222;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   font-weight: 600;
+  letter-spacing: -0.025em;
   outline: none;
   transition: border-color 0.12s ease, box-shadow 0.12s ease,
     background-color 0.12s ease;
@@ -439,27 +443,36 @@ body {
 }
 
 #card-sidebar {
-  position: fixed;
-  right: -160px;
-  top: 0.5rem;
-  width: 340px;
-  height: calc(100% - 1rem);
+  position: sticky;
+  top: 1rem;
+  align-self: flex-start;
+  width: 0;
+  max-height: calc(100vh - 2rem);
   border-radius: var(--radius-item-container);
-  border: 1px solid #eee;
+  border: 1px solid transparent;
   background: #ffffff;
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
-  padding: 1.5rem;
+  box-shadow: none;
+  padding: 0;
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  transition: right 0.2s ease, opacity 0.2s ease;
-  z-index: 30;
+  transition: width 0.2s ease, padding 0.2s ease, opacity 0.2s ease,
+    transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  z-index: 1;
   opacity: 0;
+  transform: translateX(12px);
+  overflow: auto;
+  pointer-events: none;
 }
 
 #card-sidebar.visible {
-  right: 0.5rem;
+  width: 340px;
+  padding: 1.5rem;
+  border-color: #eee;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
   opacity: 1;
+  transform: translateX(0);
+  pointer-events: auto;
 }
 
 .sidebar-header {
