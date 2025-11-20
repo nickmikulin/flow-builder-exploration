@@ -8,6 +8,8 @@ const cardSidebar = document.getElementById("card-sidebar");
 const sidebarTitle = document.getElementById("sidebar-title");
 const sidebarBody = document.getElementById("sidebar-body");
 const sidebarClose = document.getElementById("sidebar-close");
+const flowTitleInput = document.getElementById("flow-title-input");
+const flowBackButton = document.getElementById("flow-back");
 
 const state = {
   cards: [],
@@ -147,6 +149,9 @@ const CARD_TYPES = {
 };
 
 const CARD_TYPE_KEYS = Object.keys(CARD_TYPES);
+const FLOW_TITLE_KEY = "flow-title";
+const DEFAULT_FLOW_TITLE = "Untitled flow";
+let flowTitle = DEFAULT_FLOW_TITLE;
 
 function createId() {
   if (typeof crypto !== "undefined" && crypto.randomUUID) {
@@ -216,6 +221,7 @@ function init() {
   window.addEventListener("resize", redrawConnections);
   initToolbar();
   initSidebarInteractions();
+  initFlowHeader();
   applyViewport();
   initPanAndZoom();
 }
@@ -399,6 +405,41 @@ function initSidebarInteractions() {
   if (sidebarClose) {
     sidebarClose.addEventListener("click", () => hideSidebar());
   }
+}
+
+function initFlowHeader() {
+  if (flowBackButton) {
+    flowBackButton.addEventListener("click", () => {
+      if (window.history.length > 1) {
+        window.history.back();
+      }
+    });
+  }
+
+  if (!flowTitleInput) return;
+  flowTitle = loadFlowTitle();
+  flowTitleInput.value = flowTitle;
+
+  const commitTitle = () => {
+    const trimmed = (flowTitleInput.value || "").trim();
+    flowTitle = trimmed || DEFAULT_FLOW_TITLE;
+    flowTitleInput.value = flowTitle;
+    saveFlowTitle(flowTitle);
+  };
+
+  flowTitleInput.addEventListener("input", () => {
+    flowTitle = flowTitleInput.value;
+  });
+
+  flowTitleInput.addEventListener("blur", commitTitle);
+
+  flowTitleInput.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      commitTitle();
+      flowTitleInput.blur();
+    }
+  });
 }
 
 function startToolbarDrag(event, type, button) {
@@ -1199,6 +1240,26 @@ function updateGridBackground() {
   canvas.style.setProperty("--grid-size", `${size}px`);
   canvas.style.setProperty("--grid-offset-x", `${offsetX}px`);
   canvas.style.setProperty("--grid-offset-y", `${offsetY}px`);
+}
+
+function loadFlowTitle() {
+  try {
+    const stored = window.localStorage.getItem(FLOW_TITLE_KEY);
+    if (stored && stored.trim()) {
+      return stored;
+    }
+  } catch (error) {
+    console.warn("Unable to read flow title from storage.", error);
+  }
+  return DEFAULT_FLOW_TITLE;
+}
+
+function saveFlowTitle(title) {
+  try {
+    window.localStorage.setItem(FLOW_TITLE_KEY, title);
+  } catch (error) {
+    console.warn("Unable to save flow title to storage.", error);
+  }
 }
 
 function createStorage() {

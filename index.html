@@ -1,66 +1,122 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Canvas Sandbox</title>
-        <link rel="preconnect" href="https://rsms.me" />
-        <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
-        <link
-            rel="stylesheet"
-            href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"
-        />
-        <link rel="stylesheet" href="styles.css" />
-    </head>
-    <body>
-        <div id="app-shell">
-            <aside id="type-toolbar" aria-label="Card types"></aside>
-            <div id="canvas-wrapper">
-                <div id="canvas">
-                    <div id="canvas-content">
-                        <svg
-                            id="connections"
-                            xmlns="http://www.w3.org/2000/svg"
-                        >
-                            <defs>
-                                <marker
-                                    id="arrowhead"
-                                    markerWidth="8"
-                                    markerHeight="8"
-                                    refX="4"
-                                    refY="4"
-                                    orient="auto"
-                                    markerUnits="strokeWidth"
-                                >
-                                    <circle cx="4" cy="4" r="4" fill="#777" />
-                                </marker>
-                            </defs>
-                            <g id="connection-lines"></g>
-                        </svg>
-                    </div>
-                </div>
-            </div>
-            <aside id="card-sidebar" aria-live="polite">
-                <div class="sidebar-header">
-                    <div>
-                        <p class="sidebar-label">Card</p>
-                        <h2 id="sidebar-title"></h2>
-                    </div>
-                    <button
-                        id="sidebar-close"
-                        type="button"
-                        aria-label="Close sidebar"
-                    >
-                        <i class="ti ti-x"></i>
-                    </button>
-                </div>
-                <div class="sidebar-body" id="sidebar-body"></div>
-            </aside>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Canvas Sandbox</title>
+    <link rel="preconnect" href="https://rsms.me" />
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header id="flow-header">
+      <button
+        id="flow-back"
+        class="flow-back-button"
+        type="button"
+        aria-label="Go back"
+        data-tooltip="Back"
+      >
+        <i class="ti ti-arrow-left"></i>
+      </button>
+      <input
+        id="flow-title-input"
+        type="text"
+        inputmode="text"
+        maxlength="80"
+        spellcheck="false"
+        aria-label="Flow title"
+        placeholder="Untitled flow"
+      />
+      <div id="flow-history-controls">
+        <button
+          id="flow-undo"
+          class="flow-history-button"
+          type="button"
+          aria-label="Undo"
+          title="Undo"
+          data-tooltip="Undo"
+        >
+          <i class="ti ti-arrow-back-up"></i>
+        </button>
+        <button
+          id="flow-redo"
+          class="flow-history-button"
+          type="button"
+          aria-label="Redo"
+          title="Redo"
+          data-tooltip="Redo"
+        >
+          <i class="ti ti-arrow-forward-up"></i>
+        </button>
+        <div class="flow-divider" aria-hidden="true"></div>
+        <button
+          id="flow-test"
+          class="flow-action-button flow-test-button"
+          type="button"
+          aria-label="Test"
+          title="Test"
+          data-tooltip="Test"
+        >
+          TEST
+        </button>
+        <button
+          id="flow-publish"
+          class="flow-action-button flow-publish-button"
+          type="button"
+          aria-label="Publish"
+          title="Publish"
+          data-tooltip="Publish"
+        >
+          GO LIVE
+        </button>
+      </div>
+    </header>
+    <div id="app-shell">
+      <aside id="type-toolbar" aria-label="Card types"></aside>
+      <div id="canvas-wrapper">
+        <div id="canvas">
+          <div id="canvas-content">
+            <svg id="connections" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker
+                  id="arrowhead"
+                  markerWidth="8"
+                  markerHeight="8"
+                  refX="4"
+                  refY="4"
+                  orient="auto"
+                  markerUnits="strokeWidth"
+                >
+                  <circle cx="4" cy="4" r="4" fill="#777" />
+                </marker>
+              </defs>
+              <g id="connection-lines"></g>
+            </svg>
+          </div>
         </div>
-        <div id="trash-zone" aria-hidden="true">
-            <span>Drag here to delete</span>
+      </div>
+      <aside id="card-sidebar" aria-live="polite">
+        <div class="sidebar-header">
+          <div>
+            <p class="sidebar-label">Card</p>
+            <h2 id="sidebar-title"></h2>
+          </div>
+          <button id="sidebar-close" type="button" aria-label="Close sidebar">
+            <i class="ti ti-x"></i>
+          </button>
         </div>
+        <div class="sidebar-body" id="sidebar-body"></div>
+      </aside>
+    </div>
+    <div id="trash-zone" aria-hidden="true">
+      <span>Drag here to delete</span>
+    </div>
 
-        <script type="module" src="app.js"></script>
-    </body>
+    <script type="module" src="app.js"></script>
+  </body>
 </html>
