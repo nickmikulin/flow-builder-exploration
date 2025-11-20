@@ -10,6 +10,9 @@ const sidebarBody = document.getElementById("sidebar-body");
 const sidebarClose = document.getElementById("sidebar-close");
 const flowTitleInput = document.getElementById("flow-title-input");
 const flowBackButton = document.getElementById("flow-back");
+let zoomInButton = null;
+let zoomOutButton = null;
+let zoomDisplay = null;
 
 const state = {
   cards: [],
@@ -78,14 +81,16 @@ let viewportAnimation = null;
 let inboundInitialized = false;
 
 const VIEW_BOUNDS = {
-  minScale: 0.4,
-  maxScale: 2.5,
+  minScale: 0.25,
+  maxScale: 1.5,
 };
+const ZOOM_LEVELS = [0.25, 0.5, 1, 1.5];
 
 function applyViewport() {
   if (!canvasContent) return;
   canvasContent.style.transform = `translate(${viewport.x}px, ${viewport.y}px) scale(${viewport.scale})`;
   updateGridBackground();
+  updateZoomDisplay();
 }
 
 const CARD_TYPES = {
@@ -222,6 +227,7 @@ function init() {
   initToolbar();
   initSidebarInteractions();
   initFlowHeader();
+  initZoomControls();
   applyViewport();
   initPanAndZoom();
 }
@@ -370,7 +376,7 @@ function initToolbar() {
 
     if (typeKey === "action") {
       const divider = document.createElement("div");
-      divider.className = "toolbar-divider";
+      divider.className = "divider";
       toolbar.appendChild(divider);
     }
 
@@ -380,6 +386,41 @@ function initToolbar() {
 
     toolbar.appendChild(button);
   });
+
+  const divider = document.createElement("div");
+  divider.className = "divider vertical";
+  toolbar.appendChild(divider);
+
+  const buildIconButton = (id, iconName, tooltip) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.id = id;
+    btn.className = "flow-history-button";
+    btn.dataset.tooltip = tooltip;
+    btn.setAttribute("aria-label", tooltip);
+    const icon = document.createElement("i");
+    icon.className = `ti ${iconName}`;
+    icon.setAttribute("aria-hidden", "true");
+    btn.appendChild(icon);
+    return btn;
+  };
+
+  zoomInButton = buildIconButton("zoom-in", "ti-plus", "Zoom in");
+  zoomDisplay = document.createElement("span");
+  zoomDisplay.id = "zoom-display";
+  zoomDisplay.textContent = "100%";
+  zoomDisplay.setAttribute("aria-live", "polite");
+  zoomDisplay.className = "zoom-display";
+  zoomOutButton = buildIconButton("zoom-out", "ti-minus", "Zoom out");
+  const zoomDivider = document.createElement("div");
+  zoomDivider.className = "divider vertical";
+  const zoomHelp = buildIconButton("zoom-help", "ti-question-mark", "Help");
+
+  toolbar.appendChild(zoomOutButton);
+  toolbar.appendChild(zoomDisplay);
+  toolbar.appendChild(zoomInButton);
+  toolbar.appendChild(zoomDivider);
+  toolbar.appendChild(zoomHelp);
 }
 
 function spawnCardOfType(type, position) {
@@ -440,6 +481,16 @@ function initFlowHeader() {
       flowTitleInput.blur();
     }
   });
+}
+
+function initZoomControls() {
+  if (zoomInButton) {
+    zoomInButton.addEventListener("click", () => setZoomToNext("in"));
+  }
+  if (zoomOutButton) {
+    zoomOutButton.addEventListener("click", () => setZoomToNext("out"));
+  }
+  updateZoomDisplay();
 }
 
 function startToolbarDrag(event, type, button) {
@@ -943,11 +994,7 @@ function initPanAndZoom() {
         VIEW_BOUNDS.minScale,
         VIEW_BOUNDS.maxScale
       );
-      const scaleRatio = targetScale / viewport.scale;
-      viewport.x = offsetX - (offsetX - viewport.x) * scaleRatio;
-      viewport.y = offsetY - (offsetY - viewport.y) * scaleRatio;
-      viewport.scale = targetScale;
-      applyViewport();
+      zoomToScale(targetScale, { offsetX, offsetY });
     },
     { passive: false }
   );
@@ -1240,6 +1287,45 @@ function updateGridBackground() {
   canvas.style.setProperty("--grid-size", `${size}px`);
   canvas.style.setProperty("--grid-offset-x", `${offsetX}px`);
   canvas.style.setProperty("--grid-offset-y", `${offsetY}px`);
+}
+
+function updateZoomDisplay() {
+  if (!zoomDisplay) return;
+  const percent = Math.round(viewport.scale * 100);
+  zoomDisplay.textContent = `${percent}`;
+}
+
+function zoomToScale(targetScale, options = {}) {
+  if (!canvas) return;
+  const nextScale = clamp(
+    targetScale,
+    VIEW_BOUNDS.minScale,
+    VIEW_BOUNDS.maxScale
+  );
+  const rect = canvas.getBoundingClientRect();
+  const offsetX =
+    typeof options.offsetX === "number" ? options.offsetX : rect.width / 2;
+  const offsetY =
+    typeof options.offsetY === "number" ? options.offsetY : rect.height / 2;
+  const scaleRatio = nextScale / viewport.scale;
+  viewport.x = offsetX - (offsetX - viewport.x) * scaleRatio;
+  viewport.y = offsetY - (offsetY - viewport.y) * scaleRatio;
+  viewport.scale = nextScale;
+  applyViewport();
+}
+
+function setZoomToNext(direction) {
+  const levels = [...ZOOM_LEVELS].sort((a, b) => a - b);
+  const current = viewport.scale;
+  const tolerance = 0.0001;
+  let next = current;
+  if (direction === "in") {
+    next = levels.find((level) => level - current > tolerance) ?? levels.at(-1);
+  } else if (direction === "out") {
+    const below = levels.filter((level) => current - level > tolerance);
+    next = below.length ? below[below.length - 1] : levels[0];
+  }
+  zoomToScale(next);
 }
 
 function loadFlowTitle() {

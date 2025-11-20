@@ -250,14 +250,6 @@ body {
   box-shadow: 0 0 0 3px rgba(34, 34, 34, 0.25);
 }
 
-.flow-divider {
-  width: 1px;
-  height: calc(var(--button-size) - 1rem);
-  background: rgba(0, 0, 0, 0.12);
-  align-self: center;
-  margin: 0 0.35rem;
-}
-
 .flow-back-button::after,
 .flow-history-button::after,
 .flow-action-button::after {
@@ -281,26 +273,61 @@ body {
 }
 
 .flow-back-button:hover::after,
-.flow-history-button:hover::after {
+.flow-history-button:hover::after,
+.flow-action-button:hover::after {
   opacity: 1;
   transform: translate(-50%, 0);
 }
 
+/* In the bottom toolbar, show tooltips above the buttons */
+#type-toolbar .flow-history-button::after,
+#type-toolbar .flow-action-button::after {
+  top: auto;
+  bottom: calc(100% + 0.45rem);
+  left: 50%;
+  transform: translate(-50%, 4px);
+}
+
+#type-toolbar .flow-history-button:hover::after,
+#type-toolbar .flow-action-button:hover::after {
+  transform: translate(-50%, 0);
+}
+
+#zoom-display {
+  text-align: center;
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: #222;
+  letter-spacing: -0.02em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--button-size);
+  width: var(--button-size);
+  background: #eee;
+  border-radius: var(--radius-pill);
+}
+
+.flow-history-button,
+.flow-action-button {
+  pointer-events: auto;
+}
+
 #type-toolbar {
   position: fixed;
-  top: 50%;
-  left: 0.5rem;
-  transform: translateY(-50%);
+  left: 50%;
+  bottom: 0.75rem;
+  transform: translateX(-50%);
   outline: 1px solid #eee;
   background: #ffffff;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   gap: 0.375rem;
-  padding: 0.5rem;
+  padding: 0.6rem;
   z-index: 20;
   border-radius: var(--radius-3xl);
-  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0px 22px rgba(0, 0, 0, 0.1);
 }
 
 .toolbar-button {
@@ -321,9 +348,9 @@ body {
 .toolbar-button::after {
   content: attr(data-tooltip);
   position: absolute;
-  left: calc(100% + 1rem);
-  top: 50%;
-  transform: translate(10px, -50%);
+  left: 50%;
+  bottom: calc(100% + 0.45rem);
+  transform: translate(-50%, 4px);
   background: rgba(0, 0, 0, 0.75);
   color: #fff;
   padding: 0.25rem 0.5rem;
@@ -339,7 +366,7 @@ body {
 
 .toolbar-button:hover::after {
   opacity: 1;
-  transform: translate(0, -50%);
+  transform: translate(-50%, 0);
 }
 
 .toolbar-button .ti {
@@ -356,11 +383,13 @@ body {
   opacity: 0.7;
 }
 
-.toolbar-divider {
-  width: calc(100% - 1rem);
-  height: 1px;
-  background: rgba(0, 0, 0, 0.15);
-  margin: 0.35rem 0;
+.divider {
+  width: 4px;
+  height: 4px;
+  border-radius: var(--radius-full);
+  background: #ddd;
+  margin: 0 0.25rem;
+  flex-shrink: 0;
 }
 
 #canvas-wrapper {
