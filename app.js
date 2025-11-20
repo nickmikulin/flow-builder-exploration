@@ -84,7 +84,7 @@ const VIEW_BOUNDS = {
   minScale: 0.25,
   maxScale: 1.5,
 };
-const ZOOM_LEVELS = [0.25, 0.5, 1, 1.5];
+const ZOOM_LEVELS = [0.5, 0.75, 1, 1.5];
 
 function applyViewport() {
   if (!canvasContent) return;
@@ -103,12 +103,12 @@ const CARD_TYPES = {
     icon: "ti-message-circle-2",
   },
   ai: {
-    label: "Conversation",
+    label: "AI Agent",
     border: "#f0eefb", // tint-purple-6
     pastel: "#dad2fe", // tint-purple-5
     accent: "#4b2f88", // tint-purple-1
     iconColor: "#4b2f88",
-    icon: "ti-message-chatbot",
+    icon: "ti-robot",
   },
   action: {
     label: "Action",
@@ -134,6 +134,14 @@ const CARD_TYPES = {
     iconColor: "#005227",
     icon: "ti-player-play",
     locked: true,
+  },
+  startFlow: {
+    label: "Start Flow",
+    border: "#ecf4df", // tint-lime-6
+    pastel: "#c5e590", // tint-lime-5
+    accent: "#384e00", // tint-lime-1
+    iconColor: "#384e00",
+    icon: "ti-route",
   },
   randomizer: {
     label: "Randomizer",
