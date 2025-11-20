@@ -113,22 +113,24 @@ body {
   margin: 0;
   min-height: 100vh;
   display: flex;
+  flex-direction: row;
   background: #f4f4f5;
   color: #222;
 }
 
 #app-shell {
   flex: 1;
-  display: flex;
   min-height: 100vh;
   width: 100%;
-  align-items: flex-start;
-  gap: 1rem;
-  padding: 1rem;
+  position: relative;
+}
+
+#canvas-wrapper {
+  min-height: 100vh;
 }
 
 #flow-header {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 50%;
   transform: translateX(-50%);
@@ -141,7 +143,7 @@ body {
   border: 1px solid #eee;
   border-radius: 0 0 var(--radius-item-container) var(--radius-item-container);
   box-shadow: 0 0px 22px rgba(0, 0, 0, 0.1);
-  width: calc(100% - 1rem);
+  width: calc(100% - 2rem);
   max-width: 48rem;
 }
 
@@ -286,14 +288,14 @@ body {
   content: attr(data-tooltip);
   position: absolute;
   left: 50%;
-  top: calc(100% + 0.45rem);
+  top: calc(100% + 1rem);
   transform: translate(-50%, 4px);
   background: rgba(0, 0, 0, 0.75);
   color: #fff;
   padding: 0.25rem 0.5rem;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-xs);
   font-size: 0.75rem;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
   opacity: 0;
   pointer-events: none;
@@ -313,7 +315,7 @@ body {
 #type-toolbar .flow-history-button::after,
 #type-toolbar .flow-action-button::after {
   top: auto;
-  bottom: calc(100% + 0.45rem);
+  bottom: calc(100% + 1rem);
   left: 50%;
   transform: translate(-50%, 4px);
 }
@@ -344,9 +346,9 @@ body {
 }
 
 #type-toolbar {
-  position: fixed;
+  position: absolute;
   left: 50%;
-  bottom: 0.75rem;
+  bottom: 0rem;
   transform: translateX(-50%);
   outline: 1px solid #eee;
   background: #ffffff;
@@ -356,7 +358,7 @@ body {
   gap: 0.375rem;
   padding: 0.6rem;
   z-index: 20;
-  border-radius: var(--radius-item-container);
+  border-radius: var(--radius-item-container) var(--radius-item-container) 0 0;
   box-shadow: 0 0px 22px rgba(0, 0, 0, 0.1);
 }
 
@@ -379,14 +381,14 @@ body {
   content: attr(data-tooltip);
   position: absolute;
   left: 50%;
-  bottom: calc(100% + 0.45rem);
-  transform: translate(-50%, 4px);
+  bottom: calc(100% + 0.5rem);
+  transform: translate(-50%, 0.75rem);
   background: rgba(0, 0, 0, 0.75);
   color: #fff;
   padding: 0.25rem 0.5rem;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-xs);
   font-size: 0.75rem;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
   opacity: 0;
   pointer-events: none;
@@ -443,56 +445,24 @@ body {
 }
 
 #card-sidebar {
-  position: sticky;
-  top: 1rem;
-  align-self: flex-start;
-  width: 0;
-  max-height: calc(100vh - 2rem);
-  border-radius: var(--radius-item-container);
-  border: 1px solid transparent;
+  position: absolute;
+  bottom: 0rem;
+  right: -320px;
+  width: 320px;
+  height: calc(100vh - 8rem);
+  z-index: 10;
+  background-color: #fff;
+  transition: right 0.4s ease;
+  border-radius: var(--radius-item-container) 0 0 0;
+  outline: 1px solid #eee;
   background: #ffffff;
-  box-shadow: none;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  transition: width 0.2s ease, padding 0.2s ease, opacity 0.2s ease,
-    transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-  z-index: 1;
-  opacity: 0;
-  transform: translateX(12px);
-  overflow: auto;
-  pointer-events: none;
+  box-shadow: 0 0px 22px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
 }
 
 #card-sidebar.visible {
-  width: 340px;
-  padding: 1.5rem;
-  border-color: #eee;
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
-  opacity: 1;
-  transform: translateX(0);
-  pointer-events: auto;
-}
-
-.sidebar-header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 1rem;
-}
-
-.sidebar-label {
-  text-transform: uppercase;
-  font-size: 0.75rem;
-  letter-spacing: 0.08em;
-  color: #888;
-  margin: 0 0 0.2rem;
-}
-
-#sidebar-title {
-  font-size: 1.1rem;
-  margin: 0;
+  right: 0rem;
+  transition: right 0.4s ease;
 }
 
 #sidebar-close {
@@ -608,26 +578,34 @@ body {
 #trash-zone {
   position: fixed;
   bottom: 0;
-  right: 0;
+  left: 0;
   left: auto;
   width: 240px;
   height: 240px;
-  border-radius: 100% 0 0 0;
-  background: #ff3a302a;
-  color: #b21616;
+  border-radius: 0 100% 0 0;
+  background: #e74c342e;
+  color: var(--tint-red-3);
   display: flex;
-  align-items: end;
-  justify-content: start;
-  font-size: 1rem;
-  padding: 1rem;
-  text-transform: uppercase;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 600;
   letter-spacing: 0.05em;
+  padding: 6rem 3rem 1rem 0;
+  text-transform: uppercase;
   opacity: 0;
   pointer-events: none;
   transform: translateY(20px) scale(0.98);
   transition: opacity 0.2s ease, transform 0.2s ease, border-color 0.2s ease,
     width 0.2s ease, height 0.2s ease, background 0.2s ease;
   z-index: 40;
+}
+
+#trash-zone .ti {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  color: var(--tint-red-3);
 }
 
 #trash-zone::before {
@@ -640,7 +618,7 @@ body {
 }
 
 #trash-zone.active {
-  background: #ff3a304d;
+  background: #e74c3453;
   width: 260px;
   height: 260px;
 }
@@ -661,7 +639,7 @@ body {
 .delete-handle {
   pointer-events: auto;
   opacity: 0;
-  transition: opacity 0.12s ease;
+  transition: opacity 0.2s ease;
 }
 
 .connection:hover .delete-handle {
@@ -694,13 +672,12 @@ body {
   padding: 0.5rem;
   cursor: grab;
   user-select: none;
-  transition: box-shadow 0.12s ease, transform 0.12s ease;
+  transition: box-shadow 0.2s ease, transform 0.2s ease, outline-color 0.4s ease;
 }
 
 .card.dragging {
   cursor: grabbing;
   box-shadow: 0 14px 30px rgba(0, 0, 0, 0.22);
-  transform: scale(1.01);
 }
 
 .card-header {
@@ -727,6 +704,10 @@ body {
   color: var(--card-pastel);
 }
 
+.card.has-inbound {
+  outline-color: var(--card-pastel);
+}
+
 .card.has-inbound .type-icon {
   background-color: var(--card-pastel);
   color: var(--card-icon);
@@ -737,8 +718,12 @@ body {
   line-height: 1;
 }
 
+.card.inbound-pulse {
+  transition: outline-color 0.4s ease;
+}
+
 .card.inbound-pulse .type-icon {
-  transition: background-color 0.4s ease, border-radius 0.3s ease;
+  transition: background-color 0.4s ease;
 }
 
 .card-title-text {
@@ -765,7 +750,7 @@ body {
   font-size: 0.875rem;
   color: #444;
   margin: 0;
-  border-top: 1px dashed var(--card-pastel);
+  border-top: 1px solid #eee;
   padding: 0.75rem 0.25rem;
   white-space: nowrap;
 }

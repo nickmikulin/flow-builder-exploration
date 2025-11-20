@@ -97,8 +97,8 @@
         </button>
       </div>
     </header>
+    <div id="type-toolbar" aria-label="Card types"></div>
     <div id="app-shell">
-      <aside id="type-toolbar" aria-label="Card types"></aside>
       <div id="canvas-wrapper">
         <div id="canvas">
           <div id="canvas-content">
@@ -121,21 +121,22 @@
           </div>
         </div>
       </div>
-      <aside id="card-sidebar" aria-live="polite">
-        <div class="sidebar-header">
-          <div>
-            <p class="sidebar-label">Card</p>
-            <h2 id="sidebar-title"></h2>
-          </div>
-          <button id="sidebar-close" type="button" aria-label="Close sidebar">
-            <i class="ti ti-x"></i>
-          </button>
-        </div>
-        <div class="sidebar-body" id="sidebar-body"></div>
-      </aside>
     </div>
+    <div id="card-sidebar" aria-live="polite">
+      <div class="sidebar-header">
+        <div>
+          <p class="sidebar-label">Card</p>
+          <h2 id="sidebar-title"></h2>
+        </div>
+        <button id="sidebar-close" type="button" aria-label="Close sidebar">
+          <i class="ti ti-x"></i>
+        </button>
+      </div>
+      <div class="sidebar-body" id="sidebar-body"></div>
+    </div>
+
     <div id="trash-zone" aria-hidden="true">
-      <span>Drag here to delete</span>
+      <i class="ti ti-trash-x-filled"></i>Drag here to delete
     </div>
 
     <script type="module" src="app.js"></script>
