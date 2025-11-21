@@ -282,7 +282,7 @@ function createCardData(title, x, y, type = CARD_TYPE_KEYS[0]) {
     id: createId(),
     title:
       type === "start"
-        ? "When someone..."
+        ? "When..."
         : title && title.trim()
         ? title.trim()
         : meta.label,
