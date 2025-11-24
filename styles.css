@@ -508,7 +508,7 @@ select {
   border-radius: var(--radius-item);
   border: 1px solid transparent;
   color: #222;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: 600;
   letter-spacing: -0.025em;
   outline: none;
@@ -526,9 +526,11 @@ select {
   color: #999;
 }
 
+#sidebar-more,
 #sidebar-close {
   flex-shrink: 0;
   padding: 0;
+  margin-left: 0.1rem;
 }
 
 .sidebar-body {
